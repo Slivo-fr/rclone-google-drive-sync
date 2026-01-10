@@ -37,6 +37,7 @@ rclone bisync "$PATH1" "$PATH2" \
     --resync \
     --resync-mode newer \
     --drive-acknowledge-abuse \
+    --exclude "*.desktop" \
     --drive-export-formats desktop \
     --dry-run
 
@@ -54,8 +55,8 @@ if [[ "$confirm" == [yY] ]]; then
         --resync \
         --resync-mode newer \
         --drive-acknowledge-abuse \
-        --drive-export-formats desktop \
-        --exclude "/rclone-resync-backups/**"
+        --exclude "*.desktop" \
+        --drive-export-formats desktop
 
     echo "Resync complete."
 else

@@ -39,6 +39,7 @@ echo "Starting sync: $PATH1 <-> $PATH2"
     --conflict-resolve newer \
     --no-cleanup \
     --drive-export-formats desktop \
+    --exclude "*.desktop" \
     --log-file="$LOG_FILE" \
     --log-level INFO
 
