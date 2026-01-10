@@ -1,0 +1,13 @@
+# Rclone Sync Configuration Template
+# Copy this file to config.conf and fill in your personal values
+# The config.conf file will be ignored by git
+
+# Local directory path to sync
+LOCAL_PATH="/path/to/your/local/sync/directory/"
+
+# Remote rclone path (format: remote_name:/)
+REMOTE_PATH="your_remote:/"
+
+# Ntfy.sh topic for notifications (choose a unique random name)
+# Leave empty to disable notifications
+NTFY_TOPIC="your-unique-topic-name"

@@ -1,0 +1,10 @@
+# Personal configuration file (contains sensitive information)
+config.conf
+
+# Log files
+*.log
+*.log-*.gz
+
+# Backup files
+*.bak
+*.backup
