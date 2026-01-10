@@ -84,7 +84,3 @@ If `NTFY_TOPIC` is configured in `config.conf`, the sync script will send notifi
 ## Logs
 
 Sync logs are written to `rclone-hourly-sync.log` in the script directory. Log files are gitignored.
-
-## License
-
-This project is provided as-is for personal use.
