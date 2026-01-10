@@ -75,8 +75,6 @@ The `config.conf` file contains all personal settings:
 - **REMOTE_PATH**: Rclone remote path (format: `remote_name:/`)
 - **NTFY_TOPIC**: Optional ntfy.sh topic for error notifications
 
-**Note**: The `config.conf` file is gitignored and will not be committed to the repository. Only `config.conf.template` is versioned.
-
 ## Notifications
 
 If `NTFY_TOPIC` is configured in `config.conf`, the sync script will send notifications via ntfy.sh when sync failures occur. To disable notifications, leave `NTFY_TOPIC` empty.
