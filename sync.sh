@@ -27,9 +27,9 @@ PATH2="$REMOTE_PATH"
 # Define log file path
 LOG_FILE="$BASE_DIR/rclone-hourly-sync.log"
 
-# --- LOGIN PROTECTION WITH RETRIES (3 tries, 1 min apart) ---
+# --- LOGIN PROTECTION WITH RETRIES (3 tries, 5 min apart) ---
 MAX_RETRIES=3
-RETRY_DELAY=60
+RETRY_DELAY=60*5
 SUCCESS=false
 
 for ((i=1; i<=MAX_RETRIES; i++)); do
@@ -58,6 +58,7 @@ if [ "$SUCCESS" = false ]; then
 The script exited safely to avoid a mandatory --resync." \
              ntfy.sh/$NTFY_TOPIC
     fi
+    echo "ERROR: Unable to connect to $PATH2 after $MAX_RETRIES attempts. Exiting safely."
     exit 0
 fi
 
