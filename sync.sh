@@ -27,9 +27,44 @@ PATH2="$REMOTE_PATH"
 # Define log file path
 LOG_FILE="$BASE_DIR/rclone-hourly-sync.log"
 
+# --- LOGIN PROTECTION WITH RETRIES (3 tries, 1 min apart) ---
+MAX_RETRIES=3
+RETRY_DELAY=60
+SUCCESS=false
+
+for ((i=1; i<=MAX_RETRIES; i++)); do
+    echo "Verifying connection to $PATH2 (Attempt $i/$MAX_RETRIES)..."
+    
+    # Check if we can talk to Google Drive
+    if /usr/bin/rclone about "$PATH2" > /dev/null 2>&1; then
+        SUCCESS=true
+        echo "Connection verified."
+        break
+    fi
+
+    if [ $i -lt $MAX_RETRIES ]; then
+        echo "Connection failed (potential login/glitch). Retrying in $RETRY_DELAYs..."
+        sleep $RETRY_DELAY
+    fi
+done
+
+# If all retries failed, alert and exit safely
+if [ "$SUCCESS" = false ]; then
+    if [ -n "$NTFY_TOPIC" ]; then
+        curl -H "Title: 🔑 Rclone Login Error" \
+             -H "Priority: urgent" \
+             -H "Tags: key,warning" \
+             -d "Sync skipped on $(hostname). Google Drive is unreachable. 
+The script exited safely to avoid a mandatory --resync." \
+             ntfy.sh/$NTFY_TOPIC
+    fi
+    exit 0
+fi
+
+# --- THE SYNC COMMAND ---
 echo "Starting sync: $PATH1 <-> $PATH2"
 
-# --- THE COMMAND ---
+# --- THE RCLONE COMMAND ---
 /usr/bin/rclone bisync "$PATH1" "$PATH2" \
     --fast-list \
     --ignore-size \
@@ -47,7 +82,7 @@ echo "Starting sync: $PATH1 <-> $PATH2"
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
-    # Get last 10 lines of log for context
+    # Get last 10 lines of log for context in the notification
     LOG_TAIL=$(tail -n 10 "$LOG_FILE")
 
     # Send ntfy notification if NTFY_TOPIC is configured
